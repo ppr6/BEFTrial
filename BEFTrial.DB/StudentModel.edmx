@@ -1,0 +1,452 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="SchoolSchemaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ClassRoom">
+          <Key>
+            <PropertyRef Name="ClassRoomID" />
+          </Key>
+          <Property Name="ClassRoomID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClassRoomName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Section" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="ClassTeacherID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Faculty">
+          <Key>
+            <PropertyRef Name="FacultyID" />
+          </Key>
+          <Property Name="FacultyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FacultyName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="PositionID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Marks">
+          <Key>
+            <PropertyRef Name="MarksID" />
+          </Key>
+          <Property Name="MarksID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SubjectID" Type="int" Nullable="false" />
+          <Property Name="StudentID" Type="int" Nullable="false" />
+          <Property Name="Marks" Type="int" />
+        </EntityType>
+        <EntityType Name="Position">
+          <Key>
+            <PropertyRef Name="PositionID" />
+          </Key>
+          <Property Name="PositionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PositionName" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="StudentID" />
+          </Key>
+          <Property Name="StudentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StudentName" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Subject">
+          <Key>
+            <PropertyRef Name="SubjectID" />
+          </Key>
+          <Property Name="SubjectID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SubjectName" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SubjectTeacherMap">
+          <Key>
+            <PropertyRef Name="SubjectTeacherMapID" />
+          </Key>
+          <Property Name="SubjectTeacherMapID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SubjectID" Type="int" Nullable="false" />
+          <Property Name="FacultyID" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__ClassRoom__Class__3C69FB99">
+          <End Role="Faculty" Type="Self.Faculty" Multiplicity="1" />
+          <End Role="ClassRoom" Type="Self.ClassRoom" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Faculty">
+              <PropertyRef Name="FacultyID" />
+            </Principal>
+            <Dependent Role="ClassRoom">
+              <PropertyRef Name="ClassTeacherID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Faculty__Positio__398D8EEE">
+          <End Role="Position" Type="Self.Position" Multiplicity="1" />
+          <End Role="Faculty" Type="Self.Faculty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Position">
+              <PropertyRef Name="PositionID" />
+            </Principal>
+            <Dependent Role="Faculty">
+              <PropertyRef Name="PositionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Marks__StudentID__534D60F1">
+          <End Role="Student" Type="Self.Student" Multiplicity="1" />
+          <End Role="Marks" Type="Self.Marks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="StudentID" />
+            </Principal>
+            <Dependent Role="Marks">
+              <PropertyRef Name="StudentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Marks__SubjectID__52593CB8">
+          <End Role="Subject" Type="Self.Subject" Multiplicity="1" />
+          <End Role="Marks" Type="Self.Marks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subject">
+              <PropertyRef Name="SubjectID" />
+            </Principal>
+            <Dependent Role="Marks">
+              <PropertyRef Name="SubjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SubjectTe__Facul__4D94879B">
+          <End Role="Faculty" Type="Self.Faculty" Multiplicity="1" />
+          <End Role="SubjectTeacherMap" Type="Self.SubjectTeacherMap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Faculty">
+              <PropertyRef Name="FacultyID" />
+            </Principal>
+            <Dependent Role="SubjectTeacherMap">
+              <PropertyRef Name="FacultyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SubjectTe__Subje__4CA06362">
+          <End Role="Subject" Type="Self.Subject" Multiplicity="1" />
+          <End Role="SubjectTeacherMap" Type="Self.SubjectTeacherMap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subject">
+              <PropertyRef Name="SubjectID" />
+            </Principal>
+            <Dependent Role="SubjectTeacherMap">
+              <PropertyRef Name="SubjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="SP_FetchStudentAggregatePercentage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="SchoolSchemaModelStoreContainer">
+          <EntitySet Name="ClassRoom" EntityType="Self.ClassRoom" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Faculty" EntityType="Self.Faculty" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Marks" EntityType="Self.Marks" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Position" EntityType="Self.Position" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subject" EntityType="Self.Subject" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubjectTeacherMap" EntityType="Self.SubjectTeacherMap" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__ClassRoom__Class__3C69FB99" Association="Self.FK__ClassRoom__Class__3C69FB99">
+            <End Role="Faculty" EntitySet="Faculty" />
+            <End Role="ClassRoom" EntitySet="ClassRoom" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Faculty__Positio__398D8EEE" Association="Self.FK__Faculty__Positio__398D8EEE">
+            <End Role="Position" EntitySet="Position" />
+            <End Role="Faculty" EntitySet="Faculty" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Marks__StudentID__534D60F1" Association="Self.FK__Marks__StudentID__534D60F1">
+            <End Role="Student" EntitySet="Student" />
+            <End Role="Marks" EntitySet="Marks" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Marks__SubjectID__52593CB8" Association="Self.FK__Marks__SubjectID__52593CB8">
+            <End Role="Subject" EntitySet="Subject" />
+            <End Role="Marks" EntitySet="Marks" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SubjectTe__Facul__4D94879B" Association="Self.FK__SubjectTe__Facul__4D94879B">
+            <End Role="Faculty" EntitySet="Faculty" />
+            <End Role="SubjectTeacherMap" EntitySet="SubjectTeacherMap" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SubjectTe__Subje__4CA06362" Association="Self.FK__SubjectTe__Subje__4CA06362">
+            <End Role="Subject" EntitySet="Subject" />
+            <End Role="SubjectTeacherMap" EntitySet="SubjectTeacherMap" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SchoolSchemaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ClassRoom">
+          <Key>
+            <PropertyRef Name="ClassRoomID" />
+          </Key>
+          <Property Name="ClassRoomID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClassRoomName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Section" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ClassTeacherID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Faculty" Relationship="Self.FK__ClassRoom__Class__3C69FB99" FromRole="ClassRoom" ToRole="Faculty" />
+        </EntityType>
+        <EntityType Name="Faculty">
+          <Key>
+            <PropertyRef Name="FacultyID" />
+          </Key>
+          <Property Name="FacultyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FacultyName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PositionID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ClassRooms" Relationship="Self.FK__ClassRoom__Class__3C69FB99" FromRole="Faculty" ToRole="ClassRoom" />
+          <NavigationProperty Name="Position" Relationship="Self.FK__Faculty__Positio__398D8EEE" FromRole="Faculty" ToRole="Position" />
+          <NavigationProperty Name="SubjectTeacherMaps" Relationship="Self.FK__SubjectTe__Facul__4D94879B" FromRole="Faculty" ToRole="SubjectTeacherMap" />
+        </EntityType>
+        <EntityType Name="Mark">
+          <Key>
+            <PropertyRef Name="MarksID" />
+          </Key>
+          <Property Name="MarksID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SubjectID" Type="Int32" Nullable="false" />
+          <Property Name="StudentID" Type="Int32" Nullable="false" />
+          <Property Name="Marks" Type="Int32" />
+          <NavigationProperty Name="Student" Relationship="Self.FK__Marks__StudentID__534D60F1" FromRole="Marks" ToRole="Student" />
+          <NavigationProperty Name="Subject" Relationship="Self.FK__Marks__SubjectID__52593CB8" FromRole="Marks" ToRole="Subject" />
+        </EntityType>
+        <EntityType Name="Position">
+          <Key>
+            <PropertyRef Name="PositionID" />
+          </Key>
+          <Property Name="PositionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PositionName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Faculties" Relationship="Self.FK__Faculty__Positio__398D8EEE" FromRole="Position" ToRole="Faculty" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="StudentID" />
+          </Key>
+          <Property Name="StudentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StudentName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Marks" Relationship="Self.FK__Marks__StudentID__534D60F1" FromRole="Student" ToRole="Marks" />
+        </EntityType>
+        <EntityType Name="Subject">
+          <Key>
+            <PropertyRef Name="SubjectID" />
+          </Key>
+          <Property Name="SubjectID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SubjectName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Marks" Relationship="Self.FK__Marks__SubjectID__52593CB8" FromRole="Subject" ToRole="Marks" />
+          <NavigationProperty Name="SubjectTeacherMaps" Relationship="Self.FK__SubjectTe__Subje__4CA06362" FromRole="Subject" ToRole="SubjectTeacherMap" />
+        </EntityType>
+        <EntityType Name="SubjectTeacherMap">
+          <Key>
+            <PropertyRef Name="SubjectTeacherMapID" />
+          </Key>
+          <Property Name="SubjectTeacherMapID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SubjectID" Type="Int32" Nullable="false" />
+          <Property Name="FacultyID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Faculty" Relationship="Self.FK__SubjectTe__Facul__4D94879B" FromRole="SubjectTeacherMap" ToRole="Faculty" />
+          <NavigationProperty Name="Subject" Relationship="Self.FK__SubjectTe__Subje__4CA06362" FromRole="SubjectTeacherMap" ToRole="Subject" />
+        </EntityType>
+        <Association Name="FK__ClassRoom__Class__3C69FB99">
+          <End Role="Faculty" Type="Self.Faculty" Multiplicity="1" />
+          <End Role="ClassRoom" Type="Self.ClassRoom" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Faculty">
+              <PropertyRef Name="FacultyID" />
+            </Principal>
+            <Dependent Role="ClassRoom">
+              <PropertyRef Name="ClassTeacherID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Faculty__Positio__398D8EEE">
+          <End Role="Position" Type="Self.Position" Multiplicity="1" />
+          <End Role="Faculty" Type="Self.Faculty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Position">
+              <PropertyRef Name="PositionID" />
+            </Principal>
+            <Dependent Role="Faculty">
+              <PropertyRef Name="PositionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SubjectTe__Facul__4D94879B">
+          <End Role="Faculty" Type="Self.Faculty" Multiplicity="1" />
+          <End Role="SubjectTeacherMap" Type="Self.SubjectTeacherMap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Faculty">
+              <PropertyRef Name="FacultyID" />
+            </Principal>
+            <Dependent Role="SubjectTeacherMap">
+              <PropertyRef Name="FacultyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Marks__StudentID__534D60F1">
+          <End Role="Student" Type="Self.Student" Multiplicity="1" />
+          <End Role="Marks" Type="Self.Mark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="StudentID" />
+            </Principal>
+            <Dependent Role="Marks">
+              <PropertyRef Name="StudentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Marks__SubjectID__52593CB8">
+          <End Role="Subject" Type="Self.Subject" Multiplicity="1" />
+          <End Role="Marks" Type="Self.Mark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subject">
+              <PropertyRef Name="SubjectID" />
+            </Principal>
+            <Dependent Role="Marks">
+              <PropertyRef Name="SubjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SubjectTe__Subje__4CA06362">
+          <End Role="Subject" Type="Self.Subject" Multiplicity="1" />
+          <End Role="SubjectTeacherMap" Type="Self.SubjectTeacherMap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subject">
+              <PropertyRef Name="SubjectID" />
+            </Principal>
+            <Dependent Role="SubjectTeacherMap">
+              <PropertyRef Name="SubjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SchoolSchemaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ClassRooms" EntityType="Self.ClassRoom" />
+          <EntitySet Name="Faculties" EntityType="Self.Faculty" />
+          <EntitySet Name="Marks" EntityType="Self.Mark" />
+          <EntitySet Name="Positions" EntityType="Self.Position" />
+          <EntitySet Name="Students" EntityType="Self.Student" />
+          <EntitySet Name="Subjects" EntityType="Self.Subject" />
+          <EntitySet Name="SubjectTeacherMaps" EntityType="Self.SubjectTeacherMap" />
+          <AssociationSet Name="FK__ClassRoom__Class__3C69FB99" Association="Self.FK__ClassRoom__Class__3C69FB99">
+            <End Role="Faculty" EntitySet="Faculties" />
+            <End Role="ClassRoom" EntitySet="ClassRooms" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Faculty__Positio__398D8EEE" Association="Self.FK__Faculty__Positio__398D8EEE">
+            <End Role="Position" EntitySet="Positions" />
+            <End Role="Faculty" EntitySet="Faculties" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SubjectTe__Facul__4D94879B" Association="Self.FK__SubjectTe__Facul__4D94879B">
+            <End Role="Faculty" EntitySet="Faculties" />
+            <End Role="SubjectTeacherMap" EntitySet="SubjectTeacherMaps" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Marks__StudentID__534D60F1" Association="Self.FK__Marks__StudentID__534D60F1">
+            <End Role="Student" EntitySet="Students" />
+            <End Role="Marks" EntitySet="Marks" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Marks__SubjectID__52593CB8" Association="Self.FK__Marks__SubjectID__52593CB8">
+            <End Role="Subject" EntitySet="Subjects" />
+            <End Role="Marks" EntitySet="Marks" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SubjectTe__Subje__4CA06362" Association="Self.FK__SubjectTe__Subje__4CA06362">
+            <End Role="Subject" EntitySet="Subjects" />
+            <End Role="SubjectTeacherMap" EntitySet="SubjectTeacherMaps" />
+          </AssociationSet>
+          <FunctionImport Name="SP_FetchStudentAggregatePercentage" ReturnType="Collection(SchoolSchemaModel.SP_FetchStudentAggregatePercentage_Result)" />
+        </EntityContainer>
+        <ComplexType Name="SP_FetchStudentAggregatePercentage_Result">
+          <Property Type="Int32" Name="ID" Nullable="true" />
+          <Property Type="String" Name="StudentName" Nullable="true" MaxLength="255" />
+          <Property Type="Int32" Name="AggregatePercentage" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SchoolSchemaModelStoreContainer" CdmEntityContainer="SchoolSchemaEntities">
+          <EntitySetMapping Name="ClassRooms">
+            <EntityTypeMapping TypeName="SchoolSchemaModel.ClassRoom">
+              <MappingFragment StoreEntitySet="ClassRoom">
+                <ScalarProperty Name="ClassRoomID" ColumnName="ClassRoomID" />
+                <ScalarProperty Name="ClassRoomName" ColumnName="ClassRoomName" />
+                <ScalarProperty Name="Section" ColumnName="Section" />
+                <ScalarProperty Name="ClassTeacherID" ColumnName="ClassTeacherID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Faculties">
+            <EntityTypeMapping TypeName="SchoolSchemaModel.Faculty">
+              <MappingFragment StoreEntitySet="Faculty">
+                <ScalarProperty Name="FacultyID" ColumnName="FacultyID" />
+                <ScalarProperty Name="FacultyName" ColumnName="FacultyName" />
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Marks">
+            <EntityTypeMapping TypeName="SchoolSchemaModel.Mark">
+              <MappingFragment StoreEntitySet="Marks">
+                <ScalarProperty Name="MarksID" ColumnName="MarksID" />
+                <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
+                <ScalarProperty Name="StudentID" ColumnName="StudentID" />
+                <ScalarProperty Name="Marks" ColumnName="Marks" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Positions">
+            <EntityTypeMapping TypeName="SchoolSchemaModel.Position">
+              <MappingFragment StoreEntitySet="Position">
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Students">
+            <EntityTypeMapping TypeName="SchoolSchemaModel.Student">
+              <MappingFragment StoreEntitySet="Student">
+                <ScalarProperty Name="StudentID" ColumnName="StudentID" />
+                <ScalarProperty Name="StudentName" ColumnName="StudentName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subjects">
+            <EntityTypeMapping TypeName="SchoolSchemaModel.Subject">
+              <MappingFragment StoreEntitySet="Subject">
+                <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
+                <ScalarProperty Name="SubjectName" ColumnName="SubjectName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubjectTeacherMaps">
+            <EntityTypeMapping TypeName="SchoolSchemaModel.SubjectTeacherMap">
+              <MappingFragment StoreEntitySet="SubjectTeacherMap">
+                <ScalarProperty Name="SubjectTeacherMapID" ColumnName="SubjectTeacherMapID" />
+                <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
+                <ScalarProperty Name="FacultyID" ColumnName="FacultyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SP_FetchStudentAggregatePercentage" FunctionName="SchoolSchemaModel.Store.SP_FetchStudentAggregatePercentage">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SchoolSchemaModel.SP_FetchStudentAggregatePercentage_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="StudentName" ColumnName="StudentName" />
+                <ScalarProperty Name="AggregatePercentage" ColumnName="AggregatePercentage" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
